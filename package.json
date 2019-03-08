@@ -1,0 +1,19 @@
+{
+  "name": "file-crawler",
+  "version": "1.0.0",
+  "description": "Crawl a folder on your computer and collect lines of code according to specified parameters and put them into an output file",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rinbo/nodejs-file-crawler.git"
+  },
+  "author": "Robin Börjesson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rinbo/nodejs-file-crawler/issues"
+  },
+  "homepage": "https://github.com/Rinbo/nodejs-file-crawler#readme"
+}
