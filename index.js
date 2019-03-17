@@ -60,7 +60,7 @@ fileSystem.listDirectoryContent(null, (err, dirContentL1) => {
                             );
                           }
                         } else {
-                          console.log("Maximum depth level reached")
+                          console.log("Maximum depth level reached");
                         }
                       });
                     } else {
@@ -86,8 +86,19 @@ fileSystem.listDirectoryContent(null, (err, dirContentL1) => {
 
 const appendToOutputFile = data => {
   data.split("\n").forEach(line => {
-    if (line.length > 20 && line.length < 60 && line.match(/([/(){}[\]])/)) {
-      fileSystem.update("data", "output", line.trim() + "\n", err => {
+    line = line.trim();
+    if (
+      line.length > 20 &&
+      line.length < 60 &&
+      line.match(/([/(){}[\]])/) &&
+      !line.match("http") &&
+      !line.match("//") &&
+      !line.match("Robin") &&
+      !line.match("Börjesson") &&
+      !line.match("rinbo") &&
+      !line.match("sha1")
+    ) {
+      fileSystem.update("data", "output", line + "\n", err => {
         if (!err) {
           console.log("Success");
         } else {
