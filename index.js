@@ -7,20 +7,10 @@ fileSystem.listDirectoryContent(null, (err, dirContentL1) => {
     dirContentL1.forEach(elementL1 => {
       if (elementL1.isFile()) {
         // Element is a file
-        if (elementL1.name.match(".html")) {
+        if (elementL1.name.match(".js")) {
           fileSystem.read(null, elementL1.name, (err, data) => {
             if (!err) {
-              // Loop through each line in file and append it to output file if the line fullfills certain criteria
-              data.split("\n").forEach(line => {
-                console.log(line)
-                fileSystem.update("data", "output", line+"\n", err => {
-                  if (!err) {
-                    console.log("Success");
-                  } else {
-                    console.log(err, "Bummer!");
-                  }
-                });
-              });
+              appendToOutputFile(data);
             } else {
               console.log(err, "unable to read from file [level 1]");
             }
@@ -32,7 +22,19 @@ fileSystem.listDirectoryContent(null, (err, dirContentL1) => {
           if (!err) {
             dirContentL2.forEach(elementL2 => {
               if (elementL2.isFile()) {
-                // Element is a file
+                if (elementL2.name.match(".js")) {
+                  fileSystem.read(
+                    elementL1.name,
+                    elementL2.name,
+                    (err, data) => {
+                      if (!err) {
+                        appendToOutputFile(data);
+                      } else {
+                        console.log(err, "unable to read from file [level 1]");
+                      }
+                    }
+                  );
+                }
               } else {
                 // Element is a folder
                 fileSystem.listDirectoryContent(
@@ -41,8 +43,24 @@ fileSystem.listDirectoryContent(null, (err, dirContentL1) => {
                     if (!err) {
                       dirContentL3.forEach(elementL3 => {
                         if (elementL3.isFile()) {
+                          if (elementL3.name.match(".js")) {
+                            fileSystem.read(
+                              elementL1.name + "/" + elementL2.name,
+                              elementL3.name,
+                              (err, data) => {
+                                if (!err) {
+                                  appendToOutputFile(data);
+                                } else {
+                                  console.log(
+                                    err,
+                                    "unable to read from file [level 1]"
+                                  );
+                                }
+                              }
+                            );
+                          }
                         } else {
-                          //console.log("Maximum depth level reached")
+                          console.log("Maximum depth level reached")
                         }
                       });
                     } else {
@@ -65,3 +83,17 @@ fileSystem.listDirectoryContent(null, (err, dirContentL1) => {
     console.log(err, "Unable to read from directory [level 1]");
   }
 });
+
+const appendToOutputFile = data => {
+  data.split("\n").forEach(line => {
+    if (line.length > 20 && line.length < 60 && line.match(/([/(){}[\]])/)) {
+      fileSystem.update("data", "output", line.trim() + "\n", err => {
+        if (!err) {
+          console.log("Success");
+        } else {
+          console.log(err, "Bummer!");
+        }
+      });
+    }
+  });
+};

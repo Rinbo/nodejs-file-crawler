@@ -48,32 +48,22 @@ lib.read = function(dir, file, callback) {
 // Update a file with new data
 lib.update = function(dir, file, data, callback) {
   // Open file for writing
-  fs.open(`${lib.baseDir}/${dir}/${file}.txt`, "r+", function(
+  fs.open(`${lib.baseDir}/${dir}/${file}.txt`, "a+", function(
     err,
     fileDesciptor
   ) {
     if (!err && fileDesciptor) {
-      // Convert data to string
-      const stringData = JSON.stringify(data);
-
-      // Truncate the file
-      fs.ftruncate(fileDesciptor, function(err) {
+      fs.writeFile(fileDesciptor, data, function(err) {
         if (!err) {
-          fs.writeFile(fileDesciptor, data, function(err) {
+          fs.close(fileDesciptor, function(err) {
             if (!err) {
-              fs.close(fileDesciptor, function(err) {
-                if (!err) {
-                  callback(false);
-                } else {
-                  callback("Error closing the file");
-                }
-              });
+              callback(false);
             } else {
-              callback("Could not write to file");
+              callback("Error closing the file");
             }
           });
         } else {
-          callback("Error truncating the file");
+          callback("Could not write to file");
         }
       });
     } else {
