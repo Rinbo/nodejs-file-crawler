@@ -3,10 +3,9 @@ const path = require("path");
 
 const lib = {};
 
-lib.baseDir = path.join(__dirname, "./");
-lib.searchDir = path.join(__dirname, "../");
+lib.baseDir = path.join(__dirname, "./"); // Root folder for this project
+lib.searchDir = path.join(__dirname, "../");  // The folder where searching begins
 
-// Write data to file
 lib.create = function(dir, file, data, callback) {
   fs.open(`${lib.baseDir}/${dir}/${file}.text`, "wx", function(
     err,
@@ -37,17 +36,14 @@ lib.read = function(dir, file, callback) {
     `${lib.searchDir}/${dir == null ? "" : dir + "/"}${file}`,
     "utf8",
     function(err, data) {
-      if (!err && data) {
-        //const parsedData = helpers.parseJsonToObject(data);
+      if (!err && data) {        
         callback(false, data);
       } else callback(err, data);
     }
   );
 };
 
-// Update a file with new data
-lib.update = function(dir, file, data, callback) {
-  // Open file for writing
+lib.update = function(dir, file, data, callback) {  
   fs.open(`${lib.baseDir}/${dir}/${file}.txt`, "a+", function(
     err,
     fileDesciptor
@@ -95,21 +91,6 @@ lib.listDirectoryContent = function(dir, callback) {
       }
     }
   );
-};
-
-// Not needed
-lib.listFiles = function(dir, callback) {
-  fs.readdir(`${lib.baseDir}/${dir}/`, function(err, data) {
-    if (!err && data && data.length > 0) {
-      const trimmedFileNames = [];
-      data.forEach(fileName => {
-        trimmedFileNames.push(fileName.replace(".json", ""));
-      });
-      callback(false, trimmedFileNames);
-    } else {
-      callback(err, data);
-    }
-  });
 };
 
 module.exports = lib;

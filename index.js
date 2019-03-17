@@ -1,5 +1,7 @@
 const fileSystem = require("./data");
 
+const FILE_EXTENTION = FILE_EXTENTION;
+
 // Begin reading from directory one step above project root
 fileSystem.listDirectoryContent(null, (err, dirContentL1) => {
   if (!err) {
@@ -7,7 +9,7 @@ fileSystem.listDirectoryContent(null, (err, dirContentL1) => {
     dirContentL1.forEach(elementL1 => {
       if (elementL1.isFile()) {
         // Element is a file
-        if (elementL1.name.match(".js")) {
+        if (elementL1.name.match(FILE_EXTENTION)) {
           fileSystem.read(null, elementL1.name, (err, data) => {
             if (!err) {
               appendToOutputFile(data);
@@ -22,7 +24,7 @@ fileSystem.listDirectoryContent(null, (err, dirContentL1) => {
           if (!err) {
             dirContentL2.forEach(elementL2 => {
               if (elementL2.isFile()) {
-                if (elementL2.name.match(".js")) {
+                if (elementL2.name.match(FILE_EXTENTION)) {
                   fileSystem.read(
                     elementL1.name,
                     elementL2.name,
@@ -36,14 +38,13 @@ fileSystem.listDirectoryContent(null, (err, dirContentL1) => {
                   );
                 }
               } else {
-                // Element is a folder
                 fileSystem.listDirectoryContent(
                   elementL1.name + "/" + elementL2.name,
                   (err, dirContentL3) => {
                     if (!err) {
                       dirContentL3.forEach(elementL3 => {
                         if (elementL3.isFile()) {
-                          if (elementL3.name.match(".js")) {
+                          if (elementL3.name.match(FILE_EXTENTION)) {
                             fileSystem.read(
                               elementL1.name + "/" + elementL2.name,
                               elementL3.name,
@@ -84,6 +85,7 @@ fileSystem.listDirectoryContent(null, (err, dirContentL1) => {
   }
 });
 
+// Modify matchers to suit your criteria
 const appendToOutputFile = data => {
   data.split("\n").forEach(line => {
     line = line.trim();
