@@ -1,6 +1,6 @@
 const fileSystem = require("./data");
 
-const FILE_EXTENTION = FILE_EXTENTION;
+const FILE_EXTENTION = ".js";
 
 // Begin reading from directory one step above project root
 fileSystem.listDirectoryContent(null, (err, dirContentL1) => {

@@ -29,7 +29,7 @@ node index.js
 
 output.txt will now be populated with lines according to how you defined the search params. Currently, the maximum deapth is three folders down. Extend it as per your requirements.
 
-Note: The following folders and files are not searched (can be modified in data.js): 
+Note: The following folders and files are not searched (can be modified in data.js):
 
 ```
 node_modules
@@ -37,9 +37,7 @@ node_modules
 .gitignore
 bundle.js
 ```
+
 ## Reqs
+
 Node.js
-
-
-
-
